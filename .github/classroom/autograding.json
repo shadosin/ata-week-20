@@ -1,0 +1,14 @@
+{
+  "tests": [
+    {
+      "name": "Verify Integration Tests",
+      "setup": "",
+      "run": "./gradlew verifytests-integration",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 1
+    }
+  ]
+}
