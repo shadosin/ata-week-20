@@ -1,11 +1,14 @@
 package com.kenzie.chat.webapi.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kenzie.chat.usersystem.UserDto;
 import com.kenzie.chat.webapi.controller.model.CommentCreateRequest;
 import com.kenzie.chat.webapi.controller.model.UserCreateRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+
+import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -61,6 +64,11 @@ public class QueryUtility {
 
     public class ContentModerationControllerClient {
         // Add methods here
+        public ResultActions checkForSpam(List<UserDto> usersWithSpam) throws Exception {
+            return mvc.perform(post("/moderation/checkForSpam")
+                    .accept(MediaType.APPLICATION_JSON)
+                    .contentType(MediaType.APPLICATION_JSON));
+        }
     }
 
 }

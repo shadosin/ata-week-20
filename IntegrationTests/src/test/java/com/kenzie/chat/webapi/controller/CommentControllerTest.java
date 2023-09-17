@@ -4,7 +4,9 @@ import com.kenzie.chat.webapi.IntegrationTest;
 import com.kenzie.chat.webapi.controller.model.CommentCreateRequest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kenzie.chat.webapi.controller.model.UserCreateRequest;
 import net.andreinc.mockneat.MockNeat;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -32,10 +34,15 @@ class CommentControllerTest {
     @Test
     public void can_create_comment() throws Exception {
         // Fix this test
+        UserCreateRequest createRequest = new UserCreateRequest();
+        createRequest.setUsername(mockNeat.strings().get());
+        createRequest.setName(mockNeat.names().get());
+        createRequest.setEmail(mockNeat.emails().get());
+        queryUtility.userControllerClient.createUser(createRequest);
 
         // GIVEN
         CommentCreateRequest commentRequest = new CommentCreateRequest();
-        commentRequest.setOwner(mockNeat.strings().get());
+        commentRequest.setOwner(createRequest.getUsername());
         commentRequest.setTitle(mockNeat.strings().get());
         commentRequest.setContent(mockNeat.strings().get());
 
@@ -46,6 +53,25 @@ class CommentControllerTest {
     }
 
     // Add additional tests here
+    @Test
+    public void nullUser_throws_exception() throws Exception{
+        UserCreateRequest createRequest = new UserCreateRequest();
+        createRequest.setUsername(mockNeat.strings().get());
+        createRequest.setName(mockNeat.names().get());
+        createRequest.setEmail(mockNeat.emails().get());
+        queryUtility.userControllerClient.createUser(createRequest);
+
+        // GIVEN
+        CommentCreateRequest commentRequest = new CommentCreateRequest();
+        commentRequest.setOwner(null);
+        commentRequest.setTitle(mockNeat.strings().get());
+        commentRequest.setContent(mockNeat.strings().get());
+
+        // WHEN
+        Assertions.assertThrows(Exception.class, () -> {
+            queryUtility.commentControllerClient.addComment(commentRequest);
+        });
+    }
 
 }
 

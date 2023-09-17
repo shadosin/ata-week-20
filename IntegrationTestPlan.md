@@ -6,17 +6,27 @@
 
 ## Purpose
 
-This captures the test plan for the testing of endpoints through automated integration tests.
+This test plan outlines the automated integration tests for endpoints in our application. 
+These tests are designed to ensure that our application functions properly.
 
 ## Product Background
 
-*Provide a quick summary of your product and what it does.*
+Our product is a comment moderation system for a chat application. It includes the following key components:
+
+UserSystem: An external package maintained by another team, responsible for user management.
+ContentModerationService: A service that scans for new users who have posted too many comments and deactivates their accounts.
+Comment Application: The core application that manages comments, users, and moderation.
 
 ### Use Cases to be tested
 
-*List the use cases you will test here. These should be the same list from your
-design doc (though might be updated based on what you've learned since
-then!). You will refer back to these use cases in the test plans below.*
+A user can be created.
+A user can be retrieved by their username.
+Active users can post comments, and they must have a valid and active account.
+Deactivated users are not allowed to post comments.
+A comment can be retrieved by its ID.
+A list of all comments can be retrieved.
+A user can be manually deactivated.
+If a user posts too many comments during their probation period and the moderation/checkForSpam endpoint is called, the user should be deactivated.
 
 # Automated Integration Test Plan
 
@@ -30,37 +40,97 @@ use case.*
 integration tests and add these automated tests to the integration test
 package.*
 
-## Use Case: *[use case name]*
+## Use Case: *[User Creation]*
 
-### **Test case name: *[test method name, following ATA conventions]***
+### **Test case name: createUser_withValidInputs
 
 **Acceptance criteria:**
 
-1. *(List what must be true to verify the use case has been implemented
-   correctly)*
+1. A new user is successfully created.
+2. The created user is valid and active.
 
 **Endpoint(s) tested:**
 
-1. *(List only the endpoints actually tested (the "WHEN" part of your
-   test, which might have multiple steps in an integration test))*
+1. '/user/'(POST)
 
 **GIVEN (Preconditions):**
 
-1. *(List the conditions that must be true for the test case to take
-   place.)*
+1. No existing user with the same username.
 
 **WHEN (Action(s)):**
 
-1. *(List the steps that we're actually testing to verify that they work
-   correctly. Often only one, but some integration tests might contain
-   multiple WHEN steps for complex situations)*
+1.Create a new user using the '/user/' endpoint with valid input data
 
 **THEN (Verification steps):**
 
-1. *(List the steps to verify/assert that the expected behavior actually
-   happens, include any relevant invariants here as well.)*
+1. Verify that the user is successfully created
+2. Verify that the created user is valid and active.
 
 **Is there any clean-up needed for this test?**
 
-1. *(Is there anything we need to do after this test finishes, to clean
-   up and leave our service like we found it?)*
+1. Delete the created user
+
+Use Case: User Retrieval
+Test case name: getUser_withValidUsername
+Acceptance criteria:
+
+The user with the given username is successfully retrieved.
+The retrieved user is valid and active.
+Endpoint(s) tested:
+
+/user/{username} (GET)
+GIVEN (Preconditions):
+
+An existing user with the specified username.
+WHEN (Action(s)):
+
+Retrieve the user using the /user/{username} endpoint.
+THEN (Verification steps):
+
+Verify that the user with the given username is successfully retrieved.
+Verify that the retrieved user is valid and active.
+Is there any clean-up needed for this test?
+
+No clean-up needed.
+Use Case: Comment Creation
+Test case name: addNewComment_withValidUser
+Acceptance criteria:
+
+A new comment is successfully created.
+The owner of the comment is a valid and active user.
+Endpoint(s) tested:
+
+/comment/ (POST)
+GIVEN (Preconditions):
+
+An existing user with a valid and active account.
+WHEN (Action(s)):
+
+Create a new comment using the /comment/ endpoint with valid input data.
+THEN (Verification steps):
+
+Verify that the comment is successfully created.
+Verify that the owner of the comment is a valid and active user.
+Is there any clean-up needed for this test?
+
+Delete the created comment.
+Use Case: Comment Retrieval
+Test case name: getComment_withValidID
+Acceptance criteria:
+
+The comment with the given ID is successfully retrieved.
+Endpoint(s) tested:
+
+/comment/{id} (GET)
+GIVEN (Preconditions):
+
+An existing comment with the specified ID.
+WHEN (Action(s)):
+
+Retrieve the comment using the /comment/{id} endpoint.
+THEN (Verification steps):
+
+Verify that the comment with the given ID is successfully retrieved.
+Is there any clean-up needed for this test?
+
+No clean-up needed.
